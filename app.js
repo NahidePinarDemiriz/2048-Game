@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function moveLeft() {
         for (let i = 0; i < 16; i++) {
             if (i % 4 === 0) {
-                                let totalOne = squares[i].innerHTML
+                let totalOne = squares[i].innerHTML
                 let totalTwo = squares[i + 1].innerHTML
                 let totalThree = squares[i + 2].innerHTML
                 let totalFour = squares[i + 3].innerHTML
@@ -71,15 +71,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function moveUp() {
+            for (let i = 0; i < 4; i++ ){
+                let totalOne = squares[i].innerHTML
+                let totalTwo = squares[i + width].innerHTML
+                let totalThree = squares[i + width*2].innerHTML
+                let totalFour = squares[i + width*3].innerHTML
+                let column = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)]
+
+                let filteredColumn = column.filter(num => num)
+                let missing = 4 - filteredColumn.length
+                let zeros = Array(missing).fill(0)
+                let newColumn = filteredColumn.concat(zeros)
+                squares[i].innerHTML = newColumn[0]
+                squares[i + width].innerHTML = newColumn[1]
+                squares[i + width*2].innerHTML = newColumn[2]
+                squares[i + width*3].innerHTML = newColumn[3]
+            }
+    }
+
+    function moveDown() {
+            for (let i = 0; i < 4; i++ ){
+                let totalOne = squares[i].innerHTML
+                let totalTwo = squares[i + width].innerHTML
+                let totalThree = squares[i + width*2].innerHTML
+                let totalFour = squares[i + width*3].innerHTML
+                let column = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)]
+
+                let filteredColumn = column.filter(num => num)
+                let missing = 4 - filteredColumn.length
+                let zeros = Array(missing).fill(0)
+                let newColumn = zeros.concat(filteredColumn)
+
+                squares[i].innerHTML = newColumn[0]
+                squares[i + width].innerHTML = newColumn[1]
+                squares[i + width*2].innerHTML = newColumn[2]
+                squares[i + width*3].innerHTML = newColumn[3]
+            }
+    }
+
     function combineRow() {
             for (let i = 0; i < 15; i++)
                 if (squares[i].innerHTML === squares[i+1].innerHTML){
-                    let combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i+1].innerHTML)
-                    squares[i].innerHTML = combinedTotal
+                    let xl = parseInt(squares[i].innerHTML) + parseInt(squares[i+1].innerHTML)
+                    squares[i].innerHTML = xl
                     squares[i+1].innerHTML = 0
-                    score += combinedTotal
+                    score += xl
                     scoreDisplay.innerHTML = score
                 }
+        // checkForWin()
+    }
+
+    function combineColumn() {
+        for (let i = 0; i < 12; i++)
+            if (squares[i].innerHTML === squares[i+width].innerHTML){
+                let xl = parseInt(squares[i].innerHTML) + parseInt(squares[i+width].innerHTML)
+                squares[i].innerHTML = xl
+                squares[i+width].innerHTML = 0
+                score += xl
+                scoreDisplay.innerHTML = score
+            }
         // checkForWin()
     }
 
@@ -89,6 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
             keyLeft()
         } else if (e.key === 'ArrowRight') {
             keyRight()
+        } else if (e.key === 'ArrowUp') {
+            keyUp()
+        } else if (e.key === 'ArrowDown') {
+            keyDown()
         }
     }
     document.addEventListener('keydown', control)
@@ -106,4 +161,19 @@ document.addEventListener('DOMContentLoaded', () => {
         moveRight()
         generate()
     }
+
+    function keyUp() {
+        moveUp()
+        combineColumn()
+        moveUp()
+        generate()
+    }
+
+    function keyDown() {
+        moveDown()
+        combineColumn()
+        moveDown()
+        generate()
+    }
+
 })
